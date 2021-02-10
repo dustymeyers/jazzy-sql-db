@@ -24,6 +24,7 @@ app.listen(PORT, () => {
 });
 
 // TODO - Replace static content with a database tables
+/* 
 const artistList = [
   {
     name: 'Ella Fitzgerald',
@@ -41,7 +42,7 @@ const artistList = [
     name: 'Esperanza Spalding',
     birthdate: '10-18-1984',
   },
-];
+]; */
 const songList = [
   {
     title: 'Take Five',
@@ -62,7 +63,16 @@ const songList = [
 
 app.get('/artist', (req, res) => {
   console.log(`In /songs GET`);
-  res.send(artistList);
+  // Query the database
+  pool
+    .query('SELECT * FROM "artists"')
+    .then(function (dbRes) {
+      console.log(dbRes.rows);
+    })
+    .catch(function (err) {
+      console.log(err);
+      res.sendStatus(500);
+    });
 });
 
 app.post('/artist', (req, res) => {
