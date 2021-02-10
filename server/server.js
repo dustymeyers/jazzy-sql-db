@@ -78,9 +78,38 @@ app.get('/artist', (req, res) => {
     });
 });
 
+/**
+ * POST /artist
+ *
+ * Request body looks like:
+ * { name: 'This is a test artist', birthdate: '10-17-1992' }
+ */
 app.post('/artist', (req, res) => {
-  artistList.push(req.body);
-  res.sendStatus(201);
+  /**
+   * Query should look like this:
+   *
+   * INSERT INTO "artists"
+   *    ("name", "birthdate")
+   * VALUES
+   *    ('Ella Fitzgerald', '04-25-1917')
+   */
+  console.log('new artist is:', req.body);
+  pool
+    .query(
+      `
+    INSERT INTO "artists"
+        ("name", "birthdate")
+    VALUES
+        ('${req.body.name}', '${req.body.birthdate}');
+  `
+    )
+    .then(() => {
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    });
 });
 
 app.get('/song', (req, res) => {
