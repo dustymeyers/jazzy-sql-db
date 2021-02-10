@@ -93,16 +93,20 @@ app.post('/artist', (req, res) => {
    * VALUES
    *    ('Ella Fitzgerald', '04-25-1917')
    */
-  console.log('new artist is:', req.body);
-  pool
-    .query(
-      `
+  let artistQueryString = `
     INSERT INTO "artists"
         ("name", "birthdate")
     VALUES
-        ('${req.body.name}', '${req.body.birthdate}');
-    `
-    )
+        ($1, $2);
+  `;
+  let artistQueryArg = [
+    req.body.name, // $1
+    req.body.birthdate, // $2
+  ];
+
+  console.log('new artist is:', req.body);
+  pool
+    .query(artistQueryString, artistQueryArg)
     .then(() => {
       res.sendStatus(201);
     })
@@ -137,15 +141,20 @@ app.get('/song', (req, res) => {
  */
 app.post('/song', (req, res) => {
   console.log(req.body);
+  let songQueryString = `
+  INSERT INTO "songs"
+      ("title", "length", "released")
+  VALUES
+      ($1, $2, $3);
+  `;
+
+  let songQueryArg = [
+    req.body.title, // $1
+    req.body.length, // $2
+    req.body.released, // $3
+  ];
   pool
-    .query(
-      `
-    INSERT INTO "songs"
-        ("title", "length", "released")
-    VALUES
-        ('${req.body.title}', '${req.body.length}', '${req.body.released}');
-    `
-    )
+    .query(songQueryString, songQueryArg)
     .then(() => {
       res.sendStatus(201);
     })
