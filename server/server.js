@@ -42,7 +42,7 @@ const artistList = [
     name: 'Esperanza Spalding',
     birthdate: '10-18-1984',
   },
-]; */
+];
 const songList = [
   {
     title: 'Take Five',
@@ -59,7 +59,7 @@ const songList = [
     length: '5:17',
     released: '2012-02-01',
   },
-];
+]; */
 
 app.get('/artist', (req, res) => {
   console.log(`In /songs GET`);
@@ -114,7 +114,19 @@ app.post('/artist', (req, res) => {
 
 app.get('/song', (req, res) => {
   console.log(`In /songs GET`);
-  res.send(songList);
+  // Query the database
+  pool
+    .query('SELECT * FROM "songs"')
+    // Get back database results
+    .then((dbRes) => {
+      res.send(dbRes.rows);
+    })
+    // Or handle DB Error
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    });
+  // res.send(songList);
 });
 
 app.post('/song', (req, res) => {
