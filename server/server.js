@@ -101,7 +101,7 @@ app.post('/artist', (req, res) => {
         ("name", "birthdate")
     VALUES
         ('${req.body.name}', '${req.body.birthdate}');
-  `
+    `
     )
     .then(() => {
       res.sendStatus(201);
@@ -129,7 +129,28 @@ app.get('/song', (req, res) => {
   // res.send(songList);
 });
 
+/**
+ * POST /song
+ *
+ * Request body looks like:
+ * { title: 'Test Song', length: '6:66', released: '06-06-1966' }
+ */
 app.post('/song', (req, res) => {
-  songList.push(req.body);
-  res.sendStatus(201);
+  console.log(req.body);
+  pool
+    .query(
+      `
+    INSERT INTO "songs"
+        ("title", "length", "released")
+    VALUES
+        ('${req.body.title}', '${req.body.length}', '${req.body.released}');
+    `
+    )
+    .then(() => {
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    });
 });
