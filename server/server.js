@@ -66,9 +66,12 @@ app.get('/artist', (req, res) => {
   // Query the database
   pool
     .query('SELECT * FROM "artists"')
+    // get back DB results
     .then(function (dbRes) {
-      console.log(dbRes.rows);
+      // console.log(dbRes.rows);
+      res.send(dbRes.rows);
     })
+    // or handle DB error
     .catch(function (err) {
       console.log(err);
       res.sendStatus(500);
