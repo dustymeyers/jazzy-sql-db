@@ -1,20 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const pg = require('pg');
-
+const pool = require('./modules/pool');
 const app = express();
 const PORT = 5000;
-
-// CREATE a connection to our database
-const pool = new pg.Pool({
-  // This option is required
-  database: 'jazzy_sql',
-
-  // These options are not required,
-  // but you may see them around
-  host: 'localhost',
-  port: 5432,
-});
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('server/public'));
